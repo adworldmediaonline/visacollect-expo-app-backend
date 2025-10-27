@@ -21,3 +21,88 @@ model Todos {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Payment {
+  id                String   @id @default(uuid())
+
+  // PayPal Information
+  paypalOrderId     String   @unique
+  paypalPayerId     String?
+  paypalPaymentId   String?
+
+  // Payment Details
+  amount            Float
+  currency          String   @default("USD")
+  status            String   // created, approved, captured, failed
+
+  // Metadata
+  description       String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  application       VisaApplication?
+}
+
+model VisaApplication {
+  id                    String   @id @default(uuid())
+
+  // Step 1: Country Selection
+  nationalityCode       String
+  nationalityName       String
+  nationalityFlag       String
+  destinationCode       String
+  destinationName       String
+  destinationFlag       String
+
+  // Step 2: Visa Selection
+  visaType              String
+  entryType             String
+  visaValidity          String?
+  governmentFee         Float
+
+  // Step 3: Personal Details
+  firstName             String
+  lastName              String
+  dateOfBirth           String
+  countryOfBirthCode    String
+  countryOfBirthName    String
+  countryOfBirthFlag    String
+
+  // Step 4: Passport Details
+  passportNationality   String?
+  passportNumber        String
+  passportIssueDate     String
+  passportExpiryDate     String
+  residenceCountryCode  String
+  residenceCountryName  String
+  residenceCountryFlag  String
+  employmentStatus      String
+  ownsAssets            String
+  travelHistory         String
+  previousVisaApp       String
+
+  // Passport Upload
+  passportImageUrl      String?
+  passportImagePublicId String?
+
+  // Step 5: Travelers
+  travelers             Json // Array of traveler objects
+
+  // Payment Information
+  paymentId             String?  @unique
+  paymentStatus         String   @default("pending") // pending, completed, failed
+  totalAmount           Float
+  currency              String   @default("USD")
+
+  // Status
+  status                String   @default("draft") // draft, submitted, processing, approved, rejected
+
+  // Timestamps
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  submittedAt           DateTime?
+
+  // Relations
+  payment               Payment? @relation(fields: [paymentId], references: [id])
+}

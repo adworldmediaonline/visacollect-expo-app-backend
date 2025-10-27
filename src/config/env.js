@@ -10,4 +10,8 @@ export const ENV = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  PAYPAL_CLIENT_ID: process.env.PAYPAL_CLIENT_ID,
+  PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
+  PAYPAL_MODE: process.env.PAYPAL_MODE || 'sandbox',
+  APP_URL: process.env.APP_URL || 'http://localhost:3001',
 };

@@ -6,6 +6,7 @@ import { apiRateLimiter } from '#utils/rateLimiter.js';
 import { errorHandler } from '#middleware/errorHandler.js';
 import todosRouter from '#routes/todos.routes.js';
 import uploadRouter from '#routes/upload.routes.js';
+import visaApplicationRouter from '#routes/visa-application.routes.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(requestLogger);
 app.use(apiRateLimiter);
 app.use('/api/v1/todos', todosRouter);
 app.use('/api/v1/upload', uploadRouter);
+app.use('/api/v1/visa-applications', visaApplicationRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
