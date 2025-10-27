@@ -64,6 +64,7 @@ model VisaApplication {
   // Step 3: Personal Details
   firstName             String
   lastName              String
+  email                 String?
   dateOfBirth           String
   countryOfBirthCode    String
   countryOfBirthName    String

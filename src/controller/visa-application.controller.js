@@ -199,6 +199,7 @@ export const submitVisaApplication = async (req, res) => {
         // Step 3
         firstName: applicationData.step3Data.firstName,
         lastName: applicationData.step3Data.lastName,
+        email: applicationData.step3Data.email || null,
         dateOfBirth: applicationData.step3Data.dateOfBirth,
         countryOfBirthCode: applicationData.step3Data.countryOfBirth.cca2,
         countryOfBirthName: applicationData.step3Data.countryOfBirth.name,
@@ -236,10 +237,7 @@ export const submitVisaApplication = async (req, res) => {
     logger.info('Visa application submitted', { applicationId: application.id });
 
     // Send confirmation email in the background (don't block the response)
-    // Note: Email will use the first traveler's name since we don't collect email in the form
-    const emailToSend = application.firstName
-      ? `${application.firstName.toLowerCase()}.${application.lastName.toLowerCase()}@visacollect.test`
-      : 'noreply@visacollect.com';
+    const emailToSend = applicationData.step3Data.email || 'noreply@visacollect.com';
 
     sendApplicationConfirmationEmail({
       email: emailToSend,
