@@ -5,6 +5,7 @@ import { requestLogger } from '#middleware/requestLogger.js';
 import { apiRateLimiter } from '#utils/rateLimiter.js';
 import { errorHandler } from '#middleware/errorHandler.js';
 import todosRouter from '#routes/todos.routes.js';
+import uploadRouter from '#routes/upload.routes.js';
 
 const app = express();
 
@@ -14,6 +15,7 @@ applySecurityMiddleware(app);
 app.use(requestLogger);
 app.use(apiRateLimiter);
 app.use('/api/v1/todos', todosRouter);
+app.use('/api/v1/upload', uploadRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World');
