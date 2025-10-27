@@ -1,0 +1,40 @@
+# Auto-labeling configuration for PRs based on changed files
+
+'database':
+  - 'prisma/**/*'
+  - '**/*.prisma'
+
+'config':
+  - 'src/config/**/*'
+  - '.env.example'
+  - 'package.json'
+  - 'package-lock.json'
+
+'middleware':
+  - 'src/middleware/**/*'
+
+'routes':
+  - 'src/routes/**/*'
+
+'controllers':
+  - 'src/controller/**/*'
+
+'services':
+  - 'src/services/**/*'
+
+'tests':
+  - 'src/tests/**/*'
+  - '**/*.test.js'
+  - '**/*.spec.js'
+
+'documentation':
+  - '**/*.md'
+  - 'docs/**/*'
+
+'ci/cd':
+  - '.github/**/*'
+  - '.github/workflows/**/*'
+
+'dependencies':
+  - 'package.json'
+  - 'package-lock.json'
