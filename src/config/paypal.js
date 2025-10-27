@@ -1,5 +1,4 @@
 import { ENV } from './env.js';
-import { logger } from './logger.js';
 
 const PAYPAL_API_BASE = ENV.PAYPAL_MODE === 'live'
   ? 'https://api-m.paypal.com'

@@ -25,6 +25,21 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
+// Payment success and cancel routes
+app.get('/payment/success', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Payment successful. You will be redirected to the app.',
+  });
+});
+
+app.get('/payment/cancel', (req, res) => {
+  res.json({
+    success: false,
+    message: 'Payment cancelled.',
+  });
+});
+
 app.use((req, res) => res.status(404).json({ message: 'Not found' }));
 app.use(errorHandler);
 

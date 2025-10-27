@@ -28,8 +28,16 @@ export const createPayPalOrder = async (req, res) => {
           description: description || 'Visa Application Fee',
         }],
         application_context: {
-          return_url: `${ENV.APP_URL}/payment/success`,
-          cancel_url: `${ENV.APP_URL}/payment/cancel`,
+          brand_name: 'VisaCollect',
+          locale: 'en-US',
+          landing_page: 'BILLING',
+          user_action: 'PAY_NOW',
+          return_url: 'visacollect://payment/success',
+          cancel_url: 'visacollect://payment/cancel',
+          payment_method: {
+            payer_selected: 'PAYPAL',
+            payee_preferred: 'IMMEDIATE_PAYMENT_REQUIRED',
+          },
         },
       }),
     });
@@ -82,6 +90,8 @@ export const capturePayPalPayment = async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    logger.info('Attempting to capture payment', { orderId });
+
     const accessToken = await getPayPalAccessToken();
 
     const response = await fetch(
@@ -97,7 +107,17 @@ export const capturePayPalPayment = async (req, res) => {
 
     const captureData = await response.json();
 
+    logger.info('PayPal capture response', {
+      status: response.status,
+      hasData: !!captureData,
+      payerId: captureData.payer?.payer_id
+    });
+
     if (!response.ok) {
+      logger.error('PayPal capture failed', {
+        error: captureData,
+        status: response.status
+      });
       return res.status(400).json({
         success: false,
         message: 'Failed to capture payment',
@@ -106,20 +126,40 @@ export const capturePayPalPayment = async (req, res) => {
     }
 
     // Update payment record
-    await prisma.payment.updateMany({
+    const updateData = {
+      status: 'captured',
+      paypalPayerId: captureData.payer?.payer_id,
+      paypalPaymentId: captureData.purchase_units[0]?.payments?.captures[0]?.id,
+    };
+
+    logger.info('Updating payment record', { orderId, updateData });
+
+    // Find the payment record to get its ID
+    const payment = await prisma.payment.findUnique({
       where: { paypalOrderId: orderId },
-      data: {
-        status: 'captured',
-        paypalPayerId: captureData.payer?.payer_id,
-        paypalPaymentId: captureData.purchase_units[0]?.payments?.captures[0]?.id,
-      },
     });
 
-    logger.info('Payment captured', { orderId });
+    if (!payment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Payment record not found',
+      });
+    }
+
+    // Update payment record
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: updateData,
+    });
+
+    logger.info('Payment captured successfully', { orderId, paymentId: payment.id });
 
     res.status(200).json({
       success: true,
-      data: captureData,
+      data: {
+        ...captureData,
+        paymentRecordId: payment.id, // Include the database payment ID
+      },
     });
   } catch (error) {
     logger.error('Error capturing payment:', error);
@@ -183,7 +223,7 @@ export const submitVisaApplication = async (req, res) => {
         travelers: applicationData.step5Data.travelers,
 
         // Payment
-        paymentId: applicationData.paymentId,
+        paymentId: applicationData.paymentId || null,
         totalAmount: applicationData.totalAmount,
         currency: applicationData.currency || 'USD',
         paymentStatus: 'completed',
