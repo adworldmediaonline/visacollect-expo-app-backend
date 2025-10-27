@@ -171,11 +171,11 @@ flyctl deploy       # Fly.io
 
 ### **Deploy Workflow Times**
 
-| Step         | Duration           |
-| ------------ | ------------------ |
-| Migrations   | ~10-20s            |
-| Deploy       | Varies by platform |
-| **Total**    | **~1-3min**        |
+| Step       | Duration           |
+| ---------- | ------------------ |
+| Migrations | ~10-20s            |
+| Deploy     | Varies by platform |
+| **Total**  | **~1-3min**        |
 
 ---
 

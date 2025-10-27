@@ -13,17 +13,17 @@
 
 ### 🚀 **Getting Started**
 
-| Document                                      | Size | Purpose                      |
-| --------------------------------------------- | ---- | ---------------------------- |
-| [README.md](./README.md)                      | 9.1K | Main project documentation    |
-| [QUICK_START.md](./QUICK_START.md)            | -    | General quick start          |
+| Document                           | Size | Purpose                    |
+| ---------------------------------- | ---- | -------------------------- |
+| [README.md](./README.md)           | 9.1K | Main project documentation |
+| [QUICK_START.md](./QUICK_START.md) | -    | General quick start        |
 
 ### 🚀 **CI/CD Documentation**
 
-| Document                         | Size | Purpose                   | Read When              |
-| -------------------------------- | ---- | ------------------------- | ---------------------- |
-| [CI_CD_WORKFLOW_DIAGRAM.md](./CI_CD_WORKFLOW_DIAGRAM.md) | 12K | Visual workflow guide | Understanding the flow |
-| [GITHUB_ACTIONS_GUIDE.md](./GITHUB_ACTIONS_GUIDE.md)     | -    | General CI/CD guide       | Understanding Actions  |
+| Document                                                 | Size | Purpose               | Read When              |
+| -------------------------------------------------------- | ---- | --------------------- | ---------------------- |
+| [CI_CD_WORKFLOW_DIAGRAM.md](./CI_CD_WORKFLOW_DIAGRAM.md) | 12K  | Visual workflow guide | Understanding the flow |
+| [GITHUB_ACTIONS_GUIDE.md](./GITHUB_ACTIONS_GUIDE.md)     | -    | General CI/CD guide   | Understanding Actions  |
 
 ### 🗄️ **Database Documentation**
 
