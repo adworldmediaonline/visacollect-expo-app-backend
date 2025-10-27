@@ -14,4 +14,6 @@ export const ENV = {
   PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
   PAYPAL_MODE: process.env.PAYPAL_MODE || 'sandbox',
   APP_URL: process.env.APP_URL || 'http://localhost:3001',
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
+  RESEND_FROM_EMAIL: process.env.RESEND_FROM_EMAIL || 'VisaCollect <onboarding@resend.dev>',
 };

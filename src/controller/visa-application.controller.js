@@ -2,6 +2,7 @@ import prisma from '#config/prisma.js';
 import { logger } from '#config/logger.js';
 import { ENV } from '#config/env.js';
 import { getPayPalAccessToken, PAYPAL_API_BASE } from '#config/paypal.js';
+import { sendApplicationConfirmationEmail } from '#services/email-service.js';
 
 /**
  * Create PayPal Order
@@ -233,6 +234,27 @@ export const submitVisaApplication = async (req, res) => {
     });
 
     logger.info('Visa application submitted', { applicationId: application.id });
+
+    // Send confirmation email in the background (don't block the response)
+    // Note: Email will use the first traveler's name since we don't collect email in the form
+    const emailToSend = application.firstName
+      ? `${application.firstName.toLowerCase()}.${application.lastName.toLowerCase()}@visacollect.test`
+      : 'noreply@visacollect.com';
+
+    sendApplicationConfirmationEmail({
+      email: emailToSend,
+      applicationId: application.id,
+      firstName: applicationData.step3Data.firstName,
+      lastName: applicationData.step3Data.lastName,
+      destination: `${applicationData.step1Data.destination.flag} ${applicationData.step1Data.destination.name}`,
+      visaType: applicationData.step2Data.selectedVisa,
+      totalAmount: applicationData.totalAmount,
+      paymentMethod: 'PayPal',
+    }).then(() => {
+      logger.info('Confirmation email sent', { applicationId: application.id, email: emailToSend });
+    }).catch((error) => {
+      logger.error('Failed to send confirmation email', { applicationId: application.id, error });
+    });
 
     res.status(201).json({
       success: true,
