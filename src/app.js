@@ -9,7 +9,9 @@ import uploadRouter from '#routes/upload.routes.js';
 
 const app = express();
 
-app.use(express.json());
+// Increase body parser limit for image uploads (50MB)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 applySecurityMiddleware(app);
 app.use(requestLogger);

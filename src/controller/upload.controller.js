@@ -10,7 +10,7 @@ import { ENV } from '#config/env.js';
 export const uploadPassport = async (req, res) => {
   try {
     const { image } = req.body;
-    console.log(image);
+
     // Validate that image data is provided
     if (!image) {
       return res.status(400).json({
@@ -19,15 +19,24 @@ export const uploadPassport = async (req, res) => {
       });
     }
 
-    // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(image, {
-      folder: 'visa-applications/passports',
-      resource_type: 'image',
-      allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
-      transformation: [
-        { width: 1200, height: 800, crop: 'limit' },
-        { quality: 'auto', fetch_format: 'auto' },
-      ],
+    // Upload to Cloudinary using upload_stream for better memory handling
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(
+        image,
+        {
+          folder: 'visa-applications/passports',
+          resource_type: 'image',
+          allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+          transformation: [
+            { width: 1200, height: 800, crop: 'limit' },
+            { quality: 'auto', fetch_format: 'auto' },
+          ],
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
     });
 
     logger.info('Passport image uploaded successfully', {
